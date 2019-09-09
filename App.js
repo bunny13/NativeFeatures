@@ -5,6 +5,15 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import placesReducer from './store/reducers/places';
+import { init } from './helper/db'; 
+
+init()
+.then(() => {
+  console.log("Initialized Database");
+})
+.catch(() => {
+  console.log("Database Failed");
+}) 
 
 const rootReducer = combineReducers({
   places: placesReducer

@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, FlatList } from "react-native";
 import IoniconsHeaderButton from "../components/UI/HeaderButton";
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { connect } from "react-redux";
 import PlaceItem from '../components/PlaceItem';
+import { loadPlace } from "../store/actions/places";
  
 const PlacesListScreen = props => {
-    const places = props.places;
+
+    useEffect(() => {
+        props.onLoadPlaces();
+    }, []); 
+    
     const sendData = (id, title) => {
         props.navigation.navigate('PlaceDetail',{
             placeId: id,
@@ -14,13 +19,16 @@ const PlacesListScreen = props => {
         })
     }
 
+   // console.log("yaha se print hui h");
+   // console.log(props.places);
+
     return (
         <FlatList 
-            data = {places}
+            data = {props.places}
             keyExtractor = {item => item.id}
             renderItem = {item => (
                 <PlaceItem 
-                    image = {null}
+                    image = {item.item.imageUri}
                     title = {item.item.title}
                     onSelect = {() => sendData(item.item.id, item.item.title)}
                 />
@@ -46,4 +54,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(PlacesListScreen);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLoadPlaces : () => dispatch(loadPlace())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlacesListScreen);

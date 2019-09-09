@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Button, ActivityIndicator } from "react-native";
 import Colors from '../constants/Color';
 import { connect } from 'react-redux';
+import ImgPicker from '../components/ImagePicker';
 import { addPlace } from '../store/actions/places';
+import LocationPicker from '../components/LocationPicker';
 
 const styles = StyleSheet.create({
     formContainer:{
@@ -26,13 +28,18 @@ const styles = StyleSheet.create({
 
 const NewPlaceScreen = props => {
     const [title, setTitle] = useState('');
+    const [imageUri, setImageUri] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const submitHandler = () => {
         setIsLoading(true);
-        props.onSubmitPlace(title);
+        props.onSubmitPlace(title,imageUri);
         setIsLoading(false);
         props.navigation.goBack();
+    }
+
+    const onImageTaken = (uri) => {
+        setImageUri(uri);
     }
 
     if(isLoading){
@@ -47,6 +54,10 @@ const NewPlaceScreen = props => {
         <View style={styles.formContainer}>
             <Text style={styles.label}>Title</Text>
             <TextInput style={styles.inputContainer} value={title} onChangeText={(val) => setTitle(val)}/>
+            <ImgPicker
+                onImageTaken = {onImageTaken} 
+            />
+            <LocationPicker navigation={props.navigation}/>
                 <View style={styles.buttonContainer}>
                     <Button title="Submit" color={Colors.primary} onPress={() => submitHandler()}/>
                 </View>             
@@ -62,7 +73,7 @@ NewPlaceScreen.navigationOptions = navData => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSubmitPlace: (title) => dispatch(addPlace(title))
+        onSubmitPlace: (title, imageUri) => dispatch(addPlace(title, imageUri))
     }
 }
 
