@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { View,Text,StyleSheet,Image,Button, Alert, ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View,Text,StyleSheet,Button, Alert, ActivityIndicator } from "react-native";
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import Color from  "../constants/Color";
@@ -12,11 +12,11 @@ const styles = StyleSheet.create({
     mapPreview:{
         width: "100%",
         height: 200,
-        marginBottom: 10,
         borderColor: "#ccc",
         borderWidth: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginVertical:15
     },
     actions:{
         flexDirection: "row",
@@ -28,6 +28,14 @@ const styles = StyleSheet.create({
 const LocationPicker = (props) => {
     const [locCordinates, setLocCordinates] = useState();
     const [isFetching, setIsFetching] = useState(false);
+    const markedLocation = props.navigation.getParam("pickedLocation");
+
+    useEffect(() => {
+        if(markedLocation){
+            setLocCordinates(markedLocation);
+            props.getUserCoordinates(markedLocation);
+        }
+    },[markedLocation]);
 
     const verfiyPermissionHandler = async () => {
         const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -45,6 +53,10 @@ const LocationPicker = (props) => {
                 accuracy: 4
             });
             setLocCordinates({
+                lat : location.coords.latitude,
+                lon : location.coords.longitude
+            });
+            props.getUserCoordinates({
                 lat : location.coords.latitude,
                 lon : location.coords.longitude
             });

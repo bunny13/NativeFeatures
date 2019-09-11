@@ -35,8 +35,6 @@ const styles = StyleSheet.create({
 });
 
 const PlaceItem = props => {
-    console.log(props);
-    console.log("HAHA-2");
     return(
         <TouchableOpacity style={styles.placeItem} onPress={props.onSelect}>
             <Image 

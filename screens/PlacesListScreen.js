@@ -15,12 +15,9 @@ const PlacesListScreen = props => {
     const sendData = (id, title) => {
         props.navigation.navigate('PlaceDetail',{
             placeId: id,
-            placeTitle: title
+            placeTitle: title,
         })
     }
-
-   // console.log("yaha se print hui h");
-   // console.log(props.places);
 
     return (
         <FlatList 
@@ -30,6 +27,7 @@ const PlacesListScreen = props => {
                 <PlaceItem 
                     image = {item.item.imageUri}
                     title = {item.item.title}
+                    address = {item.item.address}
                     onSelect = {() => sendData(item.item.id, item.item.title)}
                 />
             )}
@@ -38,11 +36,12 @@ const PlacesListScreen = props => {
 }
 
 PlacesListScreen.navigationOptions = (navData) => {
+    //()=>navData.navigation.navigate("NewPlace")
     return {
         headerTitle: "All Places",
         headerRight: (
             <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-                <Item title="Add" iconName="md-add" onPress={()=>navData.navigation.navigate("NewPlace")}/>
+                <Item title="Add" iconName="md-add" onPress={()=>navData.navigation.navigate("Accordian")}/>
             </HeaderButtons>
         )
     }

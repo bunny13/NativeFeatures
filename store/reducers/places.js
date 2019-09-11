@@ -11,7 +11,10 @@ const placesReducer = (state=initalState, action) => {
             const addPlace = new Places(
                 action.placeId.toString(),
                 action.placeTitle,
-                action.placeImg
+                action.placeImg,
+                action.address,
+                action.lat,
+                action.lon
             )
             return {
                 ...state,
